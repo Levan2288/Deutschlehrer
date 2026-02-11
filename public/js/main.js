@@ -1,75 +1,47 @@
+// js/main.js — Точка входа приложения
 import { DatabaseService } from './DatabaseService.js';
 import { CalendarUI } from './CalendarUI.js';
-import { TestSuite } from './TestSuite.js';
-import { APP_SETTINGS } from './config.js';
+import { PackageManager } from './PackageManager.js';
+import { BookingManager } from './BookingManager.js';
+import { Validator } from './Validator.js';
 
-// Инициализация сервисов
-const db = new DatabaseService();
-let ui;
-
-// Колбэки для UI
-const onDateSelect = (date) => {
-    const formatted = date.toLocaleDateString(APP_SETTINGS.locale, { day: 'numeric', month: 'long', year: 'numeric' });
-    document.getElementById('display-date').innerText = formatted;
-    document.getElementById('booking-details').classList.remove('opacity-50', 'pointer-events-none');
-};
-
-const onTimeSelect = (time) => {
-    const dateText = document.getElementById('display-date').innerText.split(' в ')[0];
-    document.getElementById('display-date').innerHTML = `${dateText} <span class="text-brand">в ${time}</span>`;
-};
-
-// Запуск приложения
+/**
+ * Инициализация приложения.
+ * Все компоненты создаются здесь и связываются через BookingManager.
+ * Никаких глобальных функций — всё через addEventListener.
+ */
 async function initApp() {
-    await db.init();
-    TestSuite.runIntegrationTest(db); // Запуск тестов при старте
+    try {
+        // 1. Подключение к БД
+        const db = new DatabaseService();
+        const dbReady = await db.init();
+        
+        if (!dbReady) {
+            console.warn("[App] БД недоступна — форма будет работать, но отправка может не пройти.");
+        }
 
-    ui = new CalendarUI('calendar-container', onDateSelect, onTimeSelect);
-    ui.render();
+        // 2. UI-компоненты
+        const calendar = new CalendarUI();
+        const packageManager = new PackageManager();
 
-    // Привязка кнопок
-    window.changeMonth = (val) => ui.changeMonth(val);
-    window.selectTime = (t) => ui.handleTimeClick(t, event.target);
-    
-    // Обработка формы
-    document.getElementById('booking-form').onsubmit = handleFormSubmit;
-}
+        // 3. Оркестратор (связывает всё вместе)
+        const booking = new BookingManager(db, calendar, packageManager);
 
-async function handleFormSubmit(e) {
-    e.preventDefault();
-    const btn = document.getElementById('book-btn');
-    const formData = new FormData(e.target);
+        // 4. Инициализация всех компонентов
+        calendar.init();
+        packageManager.init();
+        booking.init();
 
-    const leadData = {
-        name: formData.get('name'),
-        phone: formData.get('phone'),
-        date: ui.selectedDate ? ui.selectedDate.toISOString() : null,
-        time: ui.selectedTime
-    };
+        // 5. Диагностика (dev only)
+        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+            await Validator.testConnection(db);
+        }
 
-    // 1. Тестирование данных
-    const validation = TestSuite.validateBooking(leadData);
-    if (!validation.isValid) {
-        alert("Ошибка валидации:\n" + validation.errors.join("\n"));
-        return;
-    }
+        console.log("[App] ✅ Приложение инициализировано");
 
-    // 2. Визуализация загрузки
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> ЗАПИСЬ...';
-
-    // 3. Отправка в БД
-    const result = await db.saveLead(leadData);
-
-    if (result.success) {
-        document.getElementById('form-content').classList.add('hidden');
-        document.getElementById('booking-success').classList.remove('hidden');
-    } else {
-        alert("Ошибка сервера. Попробуйте позже.");
-        btn.disabled = false;
-        btn.innerHTML = 'Попробовать снова';
+    } catch (error) {
+        console.error("[App] Критическая ошибка инициализации:", error);
     }
 }
 
-// Старт
 document.addEventListener('DOMContentLoaded', initApp);

@@ -38,6 +38,7 @@
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans flex flex-col min-h-screen">
 
+    <!-- ═══════════════ NAV ═══════════════ -->
     <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
@@ -50,6 +51,7 @@
         </div>
     </nav>
 
+    <!-- ═══════════════ HERO ═══════════════ -->
     <header class="relative bg-white overflow-hidden">
         <div class="max-w-6xl mx-auto px-4 pt-16 pb-24 lg:pt-24">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
@@ -75,8 +77,7 @@
                 </div>
                 <div class="relative">
                     <div class="aspect-[4/5] bg-gray-200 rounded-[2.5rem] overflow-hidden shadow-2xl relative">
-                         <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Елена Преподаватель" class="object-cover w-full h-full">
-                        
+                        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Елена Преподаватель" class="object-cover w-full h-full">
                         <div class="absolute bottom-8 left-8 bg-white p-4 rounded-2xl shadow-xl max-w-[200px]">
                             <div class="flex items-center gap-2 mb-2">
                                 <i class="fas fa-star text-gold"></i>
@@ -90,13 +91,13 @@
         </div>
     </header>
 
+    <!-- ═══════════════ ABOUT ═══════════════ -->
     <section id="about" class="py-20 bg-gray-50">
         <div class="max-w-4xl mx-auto px-4">
             <div class="text-center mb-16">
                 <h2 class="text-3xl font-black text-gray-900 mb-4">Почему выбирают меня?</h2>
                 <p class="text-gray-500">Не просто репетитор, а педагог внутри немецкой системы.</p>
             </div>
-            
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <i class="fas fa-university text-brand text-3xl mb-4"></i>
@@ -122,6 +123,7 @@
         </div>
     </section>
 
+    <!-- ═══════════════ PRICING ═══════════════ -->
     <section id="pricing" class="py-20 bg-white">
         <div class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-12">
@@ -130,7 +132,8 @@
             </div>
 
             <div class="grid lg:grid-cols-3 gap-8">
-                <div onclick="selectPackage('single')" id="pkg-single" class="package-card cursor-pointer border-2 border-gray-100 rounded-[2rem] p-8 hover:border-brand transition duration-300 relative bg-white">
+                <!-- Пробный -->
+                <div data-package="single" id="pkg-single" class="package-card cursor-pointer border-2 border-gray-100 rounded-[2rem] p-8 hover:border-brand transition duration-300 relative bg-white">
                     <h3 class="text-xl font-bold text-gray-400 mb-2">Пробный старт</h3>
                     <div class="text-4xl font-black text-gray-900 mb-6">45 € <span class="text-base font-medium text-gray-400">/ урок</span></div>
                     <ul class="space-y-3 mb-8 text-gray-600 text-sm">
@@ -141,12 +144,12 @@
                     <button class="w-full py-3 rounded-xl font-bold border-2 border-gray-200 text-gray-600">Выбрать</button>
                 </div>
 
-                <div onclick="selectPackage('pack10')" id="pkg-pack10" class="package-card cursor-pointer border-2 border-brand rounded-[2rem] p-8 shadow-2xl relative bg-white transform md:-translate-y-4">
+                <!-- Хит продаж -->
+                <div data-package="pack10" id="pkg-pack10" class="package-card cursor-pointer border-2 border-brand rounded-[2rem] p-8 shadow-2xl relative bg-white transform md:-translate-y-4">
                     <div class="absolute top-0 right-0 bg-brand text-white text-xs font-bold px-3 py-1 rounded-bl-xl rounded-tr-xl">ХИТ ПРОДАЖ</div>
                     <h3 class="text-xl font-bold text-brand mb-2">Курс "Результат"</h3>
                     <div class="text-4xl font-black text-gray-900 mb-2">400 €</div>
                     <p class="text-sm text-gray-400 mb-6">Пакет из 10 занятий (40€ / урок)</p>
-                    
                     <ul class="space-y-3 mb-8 text-gray-700 font-medium">
                         <li><i class="fas fa-check-circle text-brand mr-2"></i>Экономия 50€</li>
                         <li><i class="fas fa-check-circle text-brand mr-2"></i>Подготовка к TELC/Goethe</li>
@@ -156,8 +159,9 @@
                     <button class="w-full py-3 rounded-xl font-bold bg-brand text-white hover:bg-brandHover transition">Я выбираю результат</button>
                 </div>
 
-                <div onclick="selectPackage('vip')" id="pkg-vip" class="package-card cursor-pointer border-2 border-gray-100 rounded-[2rem] p-8 hover:border-gold transition duration-300 relative bg-white">
-                     <h3 class="text-xl font-bold text-gray-900 mb-2">VIP / Терапия</h3>
+                <!-- VIP -->
+                <div data-package="vip" id="pkg-vip" class="package-card cursor-pointer border-2 border-gray-100 rounded-[2rem] p-8 hover:border-gold transition duration-300 relative bg-white">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">VIP / Терапия</h3>
                     <div class="text-4xl font-black text-gray-900 mb-6">600 €</div>
                     <p class="text-sm text-gray-400 mb-6 mt-[-20px]">10 занятий + Поддержка</p>
                     <ul class="space-y-3 mb-8 text-gray-600 text-sm">
@@ -172,30 +176,32 @@
         </div>
     </section>
 
+    <!-- ═══════════════ BOOKING ═══════════════ -->
     <section id="booking" class="py-12 bg-gray-50 border-t border-gray-200">
         <div class="max-w-6xl mx-auto px-4">
-             <div class="text-center mb-10">
+            <div class="text-center mb-10">
                 <h3 class="text-2xl font-black">Забронируйте первый урок</h3>
                 <p class="text-gray-500">Выберите удобное время для старта. Если вы выбрали пакет, мы согласуем остальные даты на первом занятии.</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
                 
+                <!-- Календарь -->
                 <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-[2rem] shadow-xl border border-gray-100" id="calendar-container">
                     <div class="flex items-center justify-between mb-8">
                         <h3 id="current-month" class="text-xl sm:text-2xl font-black text-gray-900 capitalize">...</h3>
                         <div class="flex space-x-2">
-                            <button onclick="changeMonth(-1)" class="w-10 h-10 hover:bg-gray-100 rounded-xl transition flex items-center justify-center"><i class="fas fa-chevron-left"></i></button>
-                            <button onclick="changeMonth(1)" class="w-10 h-10 hover:bg-gray-100 rounded-xl transition flex items-center justify-center"><i class="fas fa-chevron-right"></i></button>
+                            <button id="btn-prev-month" class="w-10 h-10 hover:bg-gray-100 rounded-xl transition flex items-center justify-center"><i class="fas fa-chevron-left"></i></button>
+                            <button id="btn-next-month" class="w-10 h-10 hover:bg-gray-100 rounded-xl transition flex items-center justify-center"><i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                     <div class="grid grid-cols-7 gap-2 sm:gap-4 mb-4 text-center text-xs font-bold text-gray-400 uppercase">
                         <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
                     </div>
-                    <div id="calendar-grid" class="grid grid-cols-7 gap-2 sm:gap-4">
-                        </div>
+                    <div id="calendar-grid" class="grid grid-cols-7 gap-2 sm:gap-4"></div>
                 </div>
 
+                <!-- Форма бронирования -->
                 <div id="booking-details" class="lg:col-span-5 bg-white p-6 sm:p-8 rounded-[2rem] shadow-xl border border-gray-100 opacity-50 pointer-events-none transition-opacity duration-300">
                     
                     <div id="form-content">
@@ -214,17 +220,17 @@
 
                         <div class="mb-8">
                             <p class="text-xs font-bold text-gray-400 uppercase mb-3">Время (Берлин/CET)</p>
-                            <div class="grid grid-cols-3 gap-2">
-                                <button onclick="selectTime('09:00')" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition">09:00</button>
-                                <button onclick="selectTime('11:00')" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition">11:00</button>
-                                <button onclick="selectTime('13:00')" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition">13:00</button>
-                                <button onclick="selectTime('15:00')" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition">15:00</button>
-                                <button onclick="selectTime('17:00')" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition">17:00</button>
-                                <button onclick="selectTime('19:00')" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition">19:00</button>
+                            <div id="time-slots-container" class="grid grid-cols-3 gap-2">
+                                <button data-time="09:00" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">09:00</button>
+                                <button data-time="11:00" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">11:00</button>
+                                <button data-time="13:00" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">13:00</button>
+                                <button data-time="15:00" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">15:00</button>
+                                <button data-time="17:00" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">17:00</button>
+                                <button data-time="19:00" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">19:00</button>
                             </div>
                         </div>
 
-                        <form id="booking-form" class="space-y-4" onsubmit="handleFormSubmit(event)">
+                        <form id="booking-form" class="space-y-4">
                             <input type="hidden" id="package-input" name="package" value="">
                             <input type="hidden" id="date-input" name="date" value="">
                             <input type="hidden" id="time-input" name="time" value="">
@@ -247,137 +253,12 @@
                         <p class="text-gray-500 mb-6">Я свяжусь с вами в ближайшее время для подтверждения.</p>
                         <button onclick="location.reload()" class="text-brand font-bold hover:underline">Вернуться</button>
                     </div>
-
                 </div>
             </div>
         </div>
     </section>
 
-    <script>
-        // --- 1. PACKAGE SELECTION LOGIC ---
-        let selectedPackage = null;
-
-        function selectPackage(pkgId) {
-            // Remove active class from all
-            document.querySelectorAll('.package-card').forEach(el => {
-                el.classList.remove('selected', 'ring-4', 'ring-brand/30');
-            });
-
-            // Add active class to clicked
-            const activeCard = document.getElementById('pkg-' + pkgId);
-            activeCard.classList.add('selected', 'ring-4', 'ring-brand/30');
-
-            selectedPackage = pkgId;
-            document.getElementById('package-input').value = pkgId;
-
-            // Update Form Badge
-            const badge = document.getElementById('selected-package-badge');
-            badge.classList.remove('bg-gray-200', 'text-gray-600', 'bg-brand', 'text-white', 'bg-gold');
-            
-            if(pkgId === 'single') {
-                badge.textContent = "Пробный урок (45€)";
-                badge.classList.add('bg-gray-800', 'text-white');
-            } else if (pkgId === 'pack10') {
-                badge.textContent = "Пакет 10 уроков (400€)";
-                badge.classList.add('bg-brand', 'text-white');
-            } else if (pkgId === 'vip') {
-                badge.textContent = "VIP Терапия (600€)";
-                badge.classList.add('bg-gold', 'text-white');
-            }
-
-            // Scroll to calendar smoothly
-            document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
-        }
-
-
-        // --- 2. CALENDAR LOGIC (Simplified Mockup) ---
-        const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
-        let currentDate = new Date();
-        
-        function renderCalendar() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            
-            document.getElementById('current-month').innerText = `${monthNames[month]} ${year}`;
-            
-            const firstDay = new Date(year, month, 1).getDay(); // 0 = Sun
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            
-            // Adjust for Monday start (EU style)
-            let startDay = firstDay === 0 ? 6 : firstDay - 1; 
-
-            const grid = document.getElementById('calendar-grid');
-            grid.innerHTML = '';
-
-            // Empty slots
-            for (let i = 0; i < startDay; i++) {
-                grid.innerHTML += `<div></div>`;
-            }
-
-            // Days
-            for (let day = 1; day <= daysInMonth; day++) {
-                // Mock logic: disable weekends just for visual structure
-                let checkDay = new Date(year, month, day).getDay();
-                let isWeekend = (checkDay === 0 || checkDay === 6);
-                
-                let btnClass = isWeekend 
-                    ? "text-gray-300 cursor-not-allowed" 
-                    : "hover:bg-brand hover:text-white cursor-pointer font-bold text-gray-700 bg-gray-50 rounded-xl transition shadow-sm border border-gray-100";
-
-                let onclickAttr = isWeekend ? "" : `onclick="selectDate(${day})"`;
-
-                grid.innerHTML += `<div ${onclickAttr} class="h-10 sm:h-12 flex items-center justify-center ${btnClass}">${day}</div>`;
-            }
-        }
-
-        function changeMonth(step) {
-            currentDate.setMonth(currentDate.getMonth() + step);
-            renderCalendar();
-        }
-
-        // --- 3. BOOKING INTERACTION ---
-        function selectDate(day) {
-            const month = monthNames[currentDate.getMonth()];
-            document.getElementById('display-date').innerText = `${day} ${month}`;
-            document.getElementById('date-input').value = `${day} ${month}`;
-            
-            // Activate form
-            const formContainer = document.getElementById('booking-details');
-            formContainer.classList.remove('opacity-50', 'pointer-events-none');
-            formContainer.classList.add('opacity-100');
-        }
-
-        function selectTime(time) {
-            // Remove active style from time slots
-            document.querySelectorAll('.time-slot').forEach(el => {
-                el.classList.remove('bg-brand', 'text-white', 'border-transparent');
-                el.classList.add('border-gray-200');
-            });
-            
-            // Add style to clicked (using event bubbling or just finding by text for simplicity here)
-            event.target.classList.remove('border-gray-200');
-            event.target.classList.add('bg-brand', 'text-white', 'border-transparent');
-            
-            document.getElementById('time-input').value = time;
-        }
-
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            // Here you would normally send data to backend/Telegram
-            
-            // Check if package is selected
-            if (!document.getElementById('package-input').value) {
-                alert('Пожалуйста, выберите пакет обучения выше.');
-                document.getElementById('pricing').scrollIntoView({behavior: 'smooth'});
-                return;
-            }
-
-            document.getElementById('form-content').classList.add('hidden');
-            document.getElementById('booking-success').classList.remove('hidden');
-        }
-
-        // Init
-        renderCalendar();
-    </script>
+    <!-- Единственный скрипт — модульная точка входа -->
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>
