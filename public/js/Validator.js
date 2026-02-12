@@ -8,25 +8,27 @@ export class Validator {
     /**
      * Проверка данных перед отправкой.
      * @param {Object} data — данные формы
+     * @param {LanguageSwitcher} lang — переводчик (опционально)
      * @returns {{ isValid: boolean, errors: string[] }}
      */
-    static validateBooking(data) {
+    static validateBooking(data, lang = null) {
+        const t = (key, fallback) => lang ? lang.t(key) : fallback;
         const errors = [];
 
         if (!data.package) {
-            errors.push("Выберите пакет обучения");
+            errors.push(t('v.package', "Выберите пакет обучения"));
         }
         if (!data.name || data.name.trim().length < 2) {
-            errors.push("Укажите имя (минимум 2 символа)");
+            errors.push(t('v.name', "Укажите имя (минимум 2 символа)"));
         }
         if (!data.phone || data.phone.trim().length < 5) {
-            errors.push("Укажите номер телефона");
+            errors.push(t('v.phone', "Укажите номер телефона"));
         }
         if (!data.date) {
-            errors.push("Выберите дату в календаре");
+            errors.push(t('v.date', "Выберите дату в календаре"));
         }
         if (!data.time) {
-            errors.push("Выберите время занятия");
+            errors.push(t('v.time', "Выберите время занятия"));
         }
 
         return { isValid: errors.length === 0, errors };

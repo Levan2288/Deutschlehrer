@@ -12,6 +12,7 @@ export class PackageManager {
         this.packageCards = [];
         this.packageBadge = document.getElementById('selected-package-badge');
         this.packageInput = document.getElementById('package-input');
+        this.lang = null; // Устанавливается извне
         
         // Колбэк — вызывается при выборе пакета (можно подписаться извне)
         this.onPackageSelect = () => {};
@@ -49,7 +50,12 @@ export class PackageManager {
         // Обновление бейджа
         if (this.packageBadge) {
             this.packageBadge.className = `text-xs font-bold px-3 py-1 rounded-full ${pkg.badgeClass}`;
-            this.packageBadge.innerText = pkg.badgeText || pkg.label;
+            // Берём перевод бейджа из i18n, если доступен
+            const badgeKey = `badge.${packageKey}`;
+            const badgeText = this.lang ? this.lang.t(badgeKey) : (pkg.badgeText || pkg.label);
+            this.packageBadge.innerText = badgeText;
+            // Убираем data-i18n чтобы переключатель не перезаписывал выбранный бейдж
+            this.packageBadge.removeAttribute('data-i18n');
         }
 
         // Обновление hidden input

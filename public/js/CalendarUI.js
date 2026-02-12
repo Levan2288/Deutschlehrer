@@ -1,9 +1,9 @@
 // js/CalendarUI.js
-import { APP_SETTINGS } from './config.js';
 
 /**
  * Компонент календаря и выбора времени.
  * Не зависит от глобальных функций — общается через колбэки.
+ * Локаль задаётся извне через setLocale() (от LanguageSwitcher).
  * 
  * Будущее: поддержка busySlots — заблокированные слоты от админа.
  */
@@ -18,6 +18,7 @@ export class CalendarUI {
         this.currentDate = new Date();
         this.selectedDate = null;
         this.selectedTime = null;
+        this.locale = options.locale || 'de-DE';
         
         // Будущее: занятые слоты (загружаются из БД)
         this.busySlots = [];
@@ -61,7 +62,7 @@ export class CalendarUI {
         
         if (this.monthLabel) {
             this.monthLabel.innerText = this.currentDate.toLocaleString(
-                APP_SETTINGS.locale, 
+                this.locale, 
                 { month: 'long', year: 'numeric' }
             );
         }
@@ -174,6 +175,12 @@ export class CalendarUI {
      */
     setBlockedDays(days = []) {
         this.blockedDays = days;
+        this.render();
+    }
+
+    /** Смена локали (вызывается из LanguageSwitcher) */
+    setLocale(locale) {
+        this.locale = locale;
         this.render();
     }
 

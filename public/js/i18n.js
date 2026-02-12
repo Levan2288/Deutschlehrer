@@ -1,0 +1,292 @@
+// js/i18n.js — Словарь переводов
+
+export const TRANSLATIONS = {
+    ru: {
+        // Nav
+        'nav.cta': 'Записаться',
+
+        // Hero
+        'hero.badge': '🇩🇪 В Германии 20+ лет',
+        'hero.title.line1': 'Немецкий язык',
+        'hero.title.line2': 'и ',
+        'hero.title.accent': 'школьная адаптация',
+        'hero.desc': 'Два диплома немецких вузов. Статус учебного терапевта. 8 лет в школах Германии. Помогаю понять систему, а не просто выучить слова.',
+        'hero.cta.primary': 'Выбрать программу',
+        'hero.cta.secondary': 'Подробнее обо мне',
+        'hero.card.title': 'Эксперт TELC / Goethe',
+        'hero.card.desc': 'Ученики сдают экзамены и поступают в школы',
+
+        // About
+        'about.title': 'Почему выбирают меня',
+        'about.subtitle': 'Не репетитор, а педагог внутри немецкой системы',
+        'about.card1.title': 'Два диплома ВУЗов ФРГ',
+        'about.card1.desc': 'Магистр лингвистики (Гамбург) + педагог начальных классов (Лейпциг). Государственная сертификация.',
+        'about.card2.title': 'Учебный терапевт',
+        'about.card2.desc': 'Работаю с трудностями в обучении. Индивидуальный подход к когнитивным особенностям ребёнка.',
+        'about.card3.title': '8 лет в школах Германии',
+        'about.card3.desc': 'Знаю «внутреннюю кухню» начальной школы. Готовлю к реалиям, а не к учебнику.',
+        'about.card4.title': 'Game-Based Learning',
+        'about.card4.desc': 'Уроки онлайн в игровой форме. Вовлечение вместо зубрёжки.',
+
+        // Pricing
+        'pricing.title': 'Выберите формат',
+        'pricing.subtitle': 'Инвестируйте в результат, не в часы',
+
+        'pkg.single.name': 'Пробный старт',
+        'pkg.single.price': '45 €',
+        'pkg.single.period': 'одно занятие · 60 мин',
+        'pkg.single.f1': 'Диагностика уровня',
+        'pkg.single.f2': 'Полноценный урок',
+        'pkg.single.f3': 'Рекомендации по программе',
+        'pkg.single.btn': 'Выбрать',
+
+        'pkg.pack10.badge': 'ЛУЧШИЙ ВЫБОР',
+        'pkg.pack10.name': 'Курс «Результат»',
+        'pkg.pack10.price': '400 €',
+        'pkg.pack10.period': '10 занятий · 40€ за урок',
+        'pkg.pack10.f1': 'Экономия 50€',
+        'pkg.pack10.f2': 'Подготовка к TELC / Goethe',
+        'pkg.pack10.f3': 'Закреплённое время',
+        'pkg.pack10.f4': 'Домашние задания + проверка',
+        'pkg.pack10.btn': 'Я выбираю результат',
+
+        'pkg.vip.name': 'VIP / Терапия',
+        'pkg.vip.price': '600 €',
+        'pkg.vip.period': '10 занятий + поддержка',
+        'pkg.vip.f1': 'Учебная терапия',
+        'pkg.vip.f1b': ' (сложные случаи)',
+        'pkg.vip.f2': 'Консультации для родителей',
+        'pkg.vip.f3': 'Индивидуальный план адаптации',
+        'pkg.vip.f4': 'WhatsApp-связь 24/7',
+        'pkg.vip.btn': 'Выбрать VIP',
+
+        // Booking
+        'booking.title': 'Забронируйте первый урок',
+        'booking.subtitle': 'Выберите удобную дату. Остальные занятия согласуем на первом уроке.',
+        'cal.weekdays': ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
+        'booking.details': 'Детали',
+        'booking.no_package': 'Тариф не выбран',
+        'booking.date_label': 'Дата старта',
+        'booking.date_placeholder': 'Выберите дату',
+        'booking.time_label': 'Время (Берлин / CET)',
+        'booking.name_placeholder': 'Ваше имя',
+        'booking.phone_placeholder': 'WhatsApp / Телефон',
+        'booking.goal_placeholder': 'Цель: школа, экзамен, для себя...',
+        'booking.submit': 'Подтвердить запись',
+        'booking.consent': 'Нажимая кнопку, вы соглашаетесь на обработку данных',
+        'booking.success_title': 'Отлично!',
+        'booking.success_msg': 'Свяжусь с вами в ближайшее время для подтверждения.',
+        'booking.back': '← Вернуться',
+        'booking.loading': 'Отправка...',
+        'booking.time_at': 'в',
+
+        // Validation
+        'v.package': 'Выберите пакет обучения',
+        'v.name': 'Укажите имя (минимум 2 символа)',
+        'v.phone': 'Укажите номер телефона',
+        'v.date': 'Выберите дату в календаре',
+        'v.time': 'Выберите время занятия',
+        'v.server_error': 'Ошибка сервера. Попробуйте позже.',
+
+        // Config badges
+        'badge.single': 'Пробный (45€)',
+        'badge.pack10': 'Курс (400€)',
+        'badge.vip': 'VIP (600€)',
+
+        // Footer
+        'footer.rights': '© 2025 DeutschProfi. Все права защищены.',
+
+        // Nav aria
+        'aria.prev_month': 'Предыдущий месяц',
+        'aria.next_month': 'Следующий месяц',
+    },
+
+    de: {
+        'nav.cta': 'Termin buchen',
+
+        'hero.badge': '🇩🇪 Über 20 Jahre in Deutschland',
+        'hero.title.line1': 'Deutsch',
+        'hero.title.line2': 'und ',
+        'hero.title.accent': 'schulische Anpassung',
+        'hero.desc': 'Zwei Hochschulabschlüsse in Deutschland. Lerntherapeutin. 8 Jahre an deutschen Schulen. Ich helfe, das System zu verstehen — nicht nur Wörter zu lernen.',
+        'hero.cta.primary': 'Programm wählen',
+        'hero.cta.secondary': 'Über mich',
+        'hero.card.title': 'TELC / Goethe Expertin',
+        'hero.card.desc': 'Schüler bestehen Prüfungen und werden an Schulen aufgenommen',
+
+        'about.title': 'Warum mich wählen',
+        'about.subtitle': 'Keine Nachhilfe — Pädagogin im deutschen System',
+        'about.card1.title': 'Zwei deutsche Hochschulabschlüsse',
+        'about.card1.desc': 'Master Linguistik (Hamburg) + Grundschulpädagogin (Leipzig). Staatlich zertifiziert.',
+        'about.card2.title': 'Lerntherapeutin',
+        'about.card2.desc': 'Arbeit mit Lernschwierigkeiten. Individueller Ansatz für kognitive Besonderheiten des Kindes.',
+        'about.card3.title': '8 Jahre an deutschen Schulen',
+        'about.card3.desc': 'Ich kenne die Grundschule von innen. Vorbereitung auf die Realität, nicht auf das Lehrbuch.',
+        'about.card4.title': 'Game-Based Learning',
+        'about.card4.desc': 'Online-Unterricht in spielerischer Form. Engagement statt Auswendiglernen.',
+
+        'pricing.title': 'Format wählen',
+        'pricing.subtitle': 'Investieren Sie in Ergebnisse, nicht in Stunden',
+
+        'pkg.single.name': 'Probestunde',
+        'pkg.single.price': '45 €',
+        'pkg.single.period': 'eine Stunde · 60 Min.',
+        'pkg.single.f1': 'Einstufungstest',
+        'pkg.single.f2': 'Vollwertige Stunde',
+        'pkg.single.f3': 'Programmempfehlungen',
+        'pkg.single.btn': 'Wählen',
+
+        'pkg.pack10.badge': 'BESTE WAHL',
+        'pkg.pack10.name': 'Kurs «Ergebnis»',
+        'pkg.pack10.price': '400 €',
+        'pkg.pack10.period': '10 Stunden · 40€ pro Stunde',
+        'pkg.pack10.f1': '50€ Ersparnis',
+        'pkg.pack10.f2': 'TELC / Goethe Vorbereitung',
+        'pkg.pack10.f3': 'Fester Termin',
+        'pkg.pack10.f4': 'Hausaufgaben + Korrektur',
+        'pkg.pack10.btn': 'Ich wähle Ergebnis',
+
+        'pkg.vip.name': 'VIP / Therapie',
+        'pkg.vip.price': '600 €',
+        'pkg.vip.period': '10 Stunden + Betreuung',
+        'pkg.vip.f1': 'Lerntherapie',
+        'pkg.vip.f1b': ' (schwierige Fälle)',
+        'pkg.vip.f2': 'Elternberatung',
+        'pkg.vip.f3': 'Individueller Anpassungsplan',
+        'pkg.vip.f4': 'WhatsApp-Kontakt 24/7',
+        'pkg.vip.btn': 'VIP wählen',
+
+        'booking.title': 'Erste Stunde buchen',
+        'booking.subtitle': 'Wählen Sie ein passendes Datum. Weitere Termine vereinbaren wir in der ersten Stunde.',
+        'cal.weekdays': ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
+        'booking.details': 'Details',
+        'booking.no_package': 'Kein Tarif gewählt',
+        'booking.date_label': 'Startdatum',
+        'booking.date_placeholder': 'Datum wählen',
+        'booking.time_label': 'Uhrzeit (Berlin / MEZ)',
+        'booking.name_placeholder': 'Ihr Name',
+        'booking.phone_placeholder': 'WhatsApp / Telefon',
+        'booking.goal_placeholder': 'Ziel: Schule, Prüfung, persönlich...',
+        'booking.submit': 'Termin bestätigen',
+        'booking.consent': 'Mit Klick stimmen Sie der Datenverarbeitung zu',
+        'booking.success_title': 'Ausgezeichnet!',
+        'booking.success_msg': 'Ich melde mich in Kürze zur Bestätigung.',
+        'booking.back': '← Zurück',
+        'booking.loading': 'Wird gesendet...',
+        'booking.time_at': 'um',
+
+        'v.package': 'Bitte wählen Sie ein Paket',
+        'v.name': 'Bitte geben Sie Ihren Namen ein (mind. 2 Zeichen)',
+        'v.phone': 'Bitte geben Sie Ihre Telefonnummer ein',
+        'v.date': 'Bitte wählen Sie ein Datum',
+        'v.time': 'Bitte wählen Sie eine Uhrzeit',
+        'v.server_error': 'Serverfehler. Bitte versuchen Sie es später.',
+
+        'badge.single': 'Probe (45€)',
+        'badge.pack10': 'Kurs (400€)',
+        'badge.vip': 'VIP (600€)',
+
+        'footer.rights': '© 2025 DeutschProfi. Alle Rechte vorbehalten.',
+
+        'aria.prev_month': 'Vorheriger Monat',
+        'aria.next_month': 'Nächster Monat',
+    },
+
+    ko: {
+        'nav.cta': '예약하기',
+
+        'hero.badge': '🇩🇪 독일 거주 20년 이상',
+        'hero.title.line1': '독일어',
+        'hero.title.line2': '및 ',
+        'hero.title.accent': '학교 적응 지원',
+        'hero.desc': '독일 대학 학위 2개. 학습치료사 자격. 독일 학교 8년 경력. 단어 암기가 아닌, 시스템 이해를 돕습니다.',
+        'hero.cta.primary': '프로그램 선택',
+        'hero.cta.secondary': '자세히 보기',
+        'hero.card.title': 'TELC / Goethe 전문가',
+        'hero.card.desc': '학생들이 시험에 합격하고 학교에 입학합니다',
+
+        'about.title': '왜 저를 선택하나요',
+        'about.subtitle': '과외가 아닌, 독일 교육 시스템 내부의 교육자',
+        'about.card1.title': '독일 대학 학위 2개',
+        'about.card1.desc': '언어학 석사 (함부르크) + 초등교육학 (라이프치히). 국가 인증.',
+        'about.card2.title': '학습치료사',
+        'about.card2.desc': '학습 어려움을 다룹니다. 아동의 인지 특성에 맞춘 개별 접근.',
+        'about.card3.title': '독일 학교 8년 경력',
+        'about.card3.desc': '초등학교 내부를 잘 알고 있습니다. 교과서가 아닌 현실을 준비합니다.',
+        'about.card4.title': 'Game-Based Learning',
+        'about.card4.desc': '게임 형태의 온라인 수업. 암기 대신 몰입.',
+
+        'pricing.title': '형식 선택',
+        'pricing.subtitle': '시간이 아닌 결과에 투자하세요',
+
+        'pkg.single.name': '체험 수업',
+        'pkg.single.price': '45 €',
+        'pkg.single.period': '1회 수업 · 60분',
+        'pkg.single.f1': '레벨 진단',
+        'pkg.single.f2': '정규 수업',
+        'pkg.single.f3': '프로그램 추천',
+        'pkg.single.btn': '선택',
+
+        'pkg.pack10.badge': '최고의 선택',
+        'pkg.pack10.name': '코스 «결과»',
+        'pkg.pack10.price': '400 €',
+        'pkg.pack10.period': '10회 수업 · 회당 40€',
+        'pkg.pack10.f1': '50€ 절약',
+        'pkg.pack10.f2': 'TELC / Goethe 준비',
+        'pkg.pack10.f3': '고정 시간대',
+        'pkg.pack10.f4': '숙제 + 첨삭',
+        'pkg.pack10.btn': '결과를 선택합니다',
+
+        'pkg.vip.name': 'VIP / 치료',
+        'pkg.vip.price': '600 €',
+        'pkg.vip.period': '10회 수업 + 지원',
+        'pkg.vip.f1': '학습치료',
+        'pkg.vip.f1b': ' (어려운 사례)',
+        'pkg.vip.f2': '학부모 상담',
+        'pkg.vip.f3': '개별 적응 계획',
+        'pkg.vip.f4': 'WhatsApp 24/7 연락',
+        'pkg.vip.btn': 'VIP 선택',
+
+        'booking.title': '첫 수업 예약',
+        'booking.subtitle': '편한 날짜를 선택하세요. 나머지 수업은 첫 수업에서 조율합니다.',
+        'cal.weekdays': ['월', '화', '수', '목', '금', '토', '일'],
+        'booking.details': '세부사항',
+        'booking.no_package': '패키지 미선택',
+        'booking.date_label': '시작 날짜',
+        'booking.date_placeholder': '날짜 선택',
+        'booking.time_label': '시간 (베를린 / CET)',
+        'booking.name_placeholder': '이름',
+        'booking.phone_placeholder': 'WhatsApp / 전화번호',
+        'booking.goal_placeholder': '목표: 학교, 시험, 개인...',
+        'booking.submit': '예약 확인',
+        'booking.consent': '버튼을 누르면 데이터 처리에 동의합니다',
+        'booking.success_title': '완료!',
+        'booking.success_msg': '확인을 위해 곧 연락드리겠습니다.',
+        'booking.back': '← 돌아가기',
+        'booking.loading': '전송 중...',
+        'booking.time_at': '',
+
+        'v.package': '패키지를 선택하세요',
+        'v.name': '이름을 입력하세요 (최소 2자)',
+        'v.phone': '전화번호를 입력하세요',
+        'v.date': '캘린더에서 날짜를 선택하세요',
+        'v.time': '수업 시간을 선택하세요',
+        'v.server_error': '서버 오류. 나중에 다시 시도하세요.',
+
+        'badge.single': '체험 (45€)',
+        'badge.pack10': '코스 (400€)',
+        'badge.vip': 'VIP (600€)',
+
+        'footer.rights': '© 2025 DeutschProfi. 모든 권리 보유.',
+
+        'aria.prev_month': '이전 달',
+        'aria.next_month': '다음 달',
+    }
+};
+
+/** Локали календаря для каждого языка */
+export const LOCALE_MAP = {
+    ru: 'ru-RU',
+    de: 'de-DE',
+    ko: 'ko-KR'
+};

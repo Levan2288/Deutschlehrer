@@ -1,5 +1,4 @@
 // js/BookingManager.js
-import { APP_SETTINGS } from './config.js';
 import { Validator } from './Validator.js';
 
 /**
@@ -12,11 +11,13 @@ export class BookingManager {
      * @param {DatabaseService} db
      * @param {CalendarUI} calendar
      * @param {PackageManager} packageManager
+     * @param {LanguageSwitcher} langSwitcher
      */
-    constructor(db, calendar, packageManager) {
+    constructor(db, calendar, packageManager, langSwitcher) {
         this.db = db;
         this.calendar = calendar;
         this.packageManager = packageManager;
+        this.lang = langSwitcher;
 
         this.form = document.getElementById('booking-form');
         this.btn = document.getElementById('book-btn');
@@ -48,7 +49,7 @@ export class BookingManager {
     }
 
     _onDateSelected(date) {
-        const formatted = date.toLocaleDateString(APP_SETTINGS.locale, {
+        const formatted = date.toLocaleDateString(this.lang.getLocale(), {
             day: 'numeric', month: 'long', year: 'numeric'
         });
         
@@ -67,8 +68,10 @@ export class BookingManager {
 
     _onTimeSelected(time) {
         if (this.displayDate) {
-            const dateText = this.displayDate.innerText.split(' в ')[0];
-            this.displayDate.innerHTML = `${dateText} <span class="text-brand font-black">в ${time}</span>`;
+            const atWord = this.lang.t('booking.time_at');
+            const dateText = this.displayDate.innerText.split(` ${atWord} `)[0];
+            const separator = atWord ? ` ${atWord} ` : ' ';
+            this.displayDate.innerHTML = `${dateText} <span class="text-brand font-black">${separator}${time}</span>`;
         }
         document.getElementById('time-input').value = time;
     }
@@ -90,7 +93,7 @@ export class BookingManager {
         };
 
         // Валидация
-        const validation = Validator.validateBooking(leadData);
+        const validation = Validator.validateBooking(leadData, this.lang);
         if (!validation.isValid) {
             this._showErrors(validation.errors);
             return;
@@ -104,7 +107,7 @@ export class BookingManager {
         if (result.success) {
             this._showSuccess();
         } else {
-            this._showErrors([result.error || "Ошибка сервера. Попробуйте позже."]);
+            this._showErrors([result.error || this.lang.t('v.server_error')]);
             this._setLoading(false);
         }
     }
@@ -136,8 +139,8 @@ export class BookingManager {
         if (!this.btn) return;
         this.btn.disabled = state;
         this.btn.innerHTML = state
-            ? '<i class="fas fa-spinner fa-spin mr-2"></i> Отправка...'
-            : 'Подтвердить запись';
+            ? `<i class="fas fa-spinner fa-spin mr-2"></i> ${this.lang.t('booking.loading')}`
+            : this.lang.t('booking.submit');
     }
 
     _showSuccess() {
