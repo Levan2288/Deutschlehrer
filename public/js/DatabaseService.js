@@ -4,15 +4,20 @@ import {
     getAuth, 
     signInAnonymously 
 } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
-import { 
-    getFirestore, 
-    collection, 
-    addDoc, 
+import {
+    getFirestore,
+    collection,
+    addDoc,
     getDocs,
+    doc,
+    getDoc,
+    setDoc,
+    updateDoc,
+    deleteDoc,
     query,
     where,
     orderBy,
-    serverTimestamp 
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 import { FIREBASE_CONFIG, APP_SETTINGS } from './config.js';
 
@@ -168,23 +173,126 @@ export class DatabaseService {
         }
     }
 
-    /**
-     * БУДУЩЕЕ: Сохранение расписания админа.
-     * Админ указывает, в какие дни и часы он свободен.
-     */
-    async saveSchedule(scheduleData) {
+    // ═══════════════ АДМИН: Статус лида ═══════════════
+
+    async updateLeadStatus(leadId, status) {
         try {
             if (!this.isConnected) await this.init();
-            
+            const leadRef = doc(this.db, APP_SETTINGS.collectionName, leadId);
+            await updateDoc(leadRef, { status, updatedAt: serverTimestamp() });
+            return { success: true };
+        } catch (error) {
+            console.error("[DB] Ошибка обновления статуса:", error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    // ═══════════════ АДМИН: Расписание ═══════════════
+
+    async getSchedule() {
+        try {
+            if (!this.isConnected) await this.init();
             const scheduleRef = collection(this.db, APP_SETTINGS.scheduleCollection);
-            const docRef = await addDoc(scheduleRef, {
-                ...scheduleData,
-                updatedAt: serverTimestamp()
-            });
-            
-            return { success: true, id: docRef.id };
+            const snapshot = await getDocs(scheduleRef);
+            return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        } catch (error) {
+            console.error("[DB] Ошибка чтения расписания:", error);
+            return [];
+        }
+    }
+
+    async setScheduleForDate(dateStr, slots) {
+        try {
+            if (!this.isConnected) await this.init();
+            const docRef = doc(this.db, APP_SETTINGS.scheduleCollection, dateStr);
+            if (slots.length === 0) {
+                await deleteDoc(docRef);
+            } else {
+                await setDoc(docRef, { slots, updatedAt: serverTimestamp() });
+            }
+            return { success: true };
         } catch (error) {
             console.error("[DB] Ошибка сохранения расписания:", error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    // ═══════════════ АДМИН: Пакеты (цены) ═══════════════
+
+    async getAdminPackages() {
+        try {
+            if (!this.isConnected) await this.init();
+            const docRef = doc(this.db, APP_SETTINGS.settingsCollection, 'packages');
+            const snap = await getDoc(docRef);
+            return snap.exists() ? snap.data() : null;
+        } catch (error) {
+            console.error("[DB] Ошибка чтения пакетов:", error);
+            return null;
+        }
+    }
+
+    async saveAdminPackages(packages) {
+        try {
+            if (!this.isConnected) await this.init();
+            const docRef = doc(this.db, APP_SETTINGS.settingsCollection, 'packages');
+            await setDoc(docRef, { ...packages, updatedAt: serverTimestamp() });
+            return { success: true };
+        } catch (error) {
+            console.error("[DB] Ошибка сохранения пакетов:", error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    // ═══════════════ АДМИН: Услуги ═══════════════
+
+    async getServices() {
+        try {
+            if (!this.isConnected) await this.init();
+            const servicesRef = collection(this.db, APP_SETTINGS.servicesCollection);
+            const snapshot = await getDocs(servicesRef);
+            return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        } catch (error) {
+            console.error("[DB] Ошибка чтения услуг:", error);
+            return [];
+        }
+    }
+
+    async addService(serviceData) {
+        try {
+            if (!this.isConnected) await this.init();
+            const servicesRef = collection(this.db, APP_SETTINGS.servicesCollection);
+            const docRef = await addDoc(servicesRef, {
+                ...serviceData,
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp()
+            });
+            return { success: true, id: docRef.id };
+        } catch (error) {
+            console.error("[DB] Ошибка добавления услуги:", error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    async updateService(serviceId, data) {
+        try {
+            if (!this.isConnected) await this.init();
+            const docRef = doc(this.db, APP_SETTINGS.servicesCollection, serviceId);
+            await updateDoc(docRef, { ...data, updatedAt: serverTimestamp() });
+            return { success: true };
+        } catch (error) {
+            console.error("[DB] Ошибка обновления услуги:", error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    async deleteService(serviceId) {
+        try {
+            if (!this.isConnected) await this.init();
+            const docRef = doc(this.db, APP_SETTINGS.servicesCollection, serviceId);
+            await deleteDoc(docRef);
+            return { success: true };
+        } catch (error) {
+            console.error("[DB] Ошибка удаления услуги:", error);
             return { success: false, error: error.message };
         }
     }

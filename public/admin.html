@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeutschProfi — Админ-панель</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#22CBB9',
+                        brandHover: '#1BA899',
+                        brandLight: '#F0FDFA',
+                        dark: '#1F2937',
+                        gold: '#F59E0B'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .sidebar-link.active { background-color: rgba(34, 203, 185, 0.15); color: #22CBB9; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+
+    <!-- ═══════════════ SIDEBAR ═══════════════ -->
+    <aside class="fixed left-0 top-0 w-64 h-full bg-gray-900 text-white z-40 flex flex-col">
+        <div class="p-6 border-b border-gray-700">
+            <div class="flex items-center space-x-2">
+                <div class="bg-brand p-2 rounded-lg"><i class="fas fa-graduation-cap"></i></div>
+                <span class="font-black text-lg tracking-tight">DEUTSCH<span class="text-brand">PROFI</span></span>
+            </div>
+            <p class="text-gray-500 text-xs mt-2">Панель управления</p>
+        </div>
+        <nav class="flex-1 p-4 space-y-1">
+            <a href="#" data-tab="leads" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-300 hover:bg-gray-800 transition">
+                <i class="fas fa-users w-5 text-center"></i> Лиды
+            </a>
+            <a href="#" data-tab="schedule" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-300 hover:bg-gray-800 transition">
+                <i class="fas fa-calendar-alt w-5 text-center"></i> Расписание
+            </a>
+            <a href="#" data-tab="packages" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-300 hover:bg-gray-800 transition">
+                <i class="fas fa-tags w-5 text-center"></i> Пакеты
+            </a>
+            <a href="#" data-tab="services" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-300 hover:bg-gray-800 transition">
+                <i class="fas fa-concierge-bell w-5 text-center"></i> Услуги
+            </a>
+        </nav>
+        <div class="p-4 border-t border-gray-700">
+            <a href="index.html" class="flex items-center gap-2 text-gray-500 text-xs hover:text-gray-300 transition">
+                <i class="fas fa-external-link-alt"></i> Открыть сайт
+            </a>
+        </div>
+    </aside>
+
+    <!-- ═══════════════ MAIN ═══════════════ -->
+    <main class="ml-64 p-8">
+
+        <!-- Индикатор загрузки -->
+        <div id="loading-overlay" class="fixed inset-0 bg-white/80 z-50 flex items-center justify-center ml-64">
+            <div class="text-center">
+                <i class="fas fa-spinner fa-spin text-brand text-3xl mb-3"></i>
+                <p class="text-gray-500 text-sm">Подключение к базе данных...</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════ TAB: ЛИДЫ ═══════════════ -->
+        <section id="tab-leads" class="tab-content active">
+            <div class="flex items-center justify-between mb-6">
+                <h1 class="text-2xl font-black text-gray-900">Лиды</h1>
+                <button id="btn-refresh-leads" class="bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-50 transition">
+                    <i class="fas fa-sync-alt mr-2"></i>Обновить
+                </button>
+            </div>
+
+            <!-- Фильтр статусов -->
+            <div class="flex gap-2 mb-6 flex-wrap" id="lead-filters">
+                <button data-filter="" class="filter-btn active bg-brand text-white px-4 py-2 rounded-lg text-sm font-bold transition">Все</button>
+                <button data-filter="new" class="filter-btn bg-white text-gray-600 border border-gray-200 px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-50 transition">Новые</button>
+                <button data-filter="valid" class="filter-btn bg-white text-gray-600 border border-gray-200 px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-50 transition">Валидные</button>
+                <button data-filter="hold" class="filter-btn bg-white text-gray-600 border border-gray-200 px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-50 transition">Ожидание</button>
+                <button data-filter="trash" class="filter-btn bg-white text-gray-600 border border-gray-200 px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-50 transition">Мусор</button>
+            </div>
+
+            <!-- Таблица лидов -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-gray-50 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                <th class="px-6 py-4">Дата бронирования</th>
+                                <th class="px-6 py-4">Пакет</th>
+                                <th class="px-6 py-4">Имя</th>
+                                <th class="px-6 py-4">Телефон</th>
+                                <th class="px-6 py-4">Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leads-table-body">
+                            <tr><td colspan="5" class="px-6 py-12 text-center text-gray-400">Загрузка...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════ TAB: РАСПИСАНИЕ ═══════════════ -->
+        <section id="tab-schedule" class="tab-content">
+            <div class="flex items-center justify-between mb-6">
+                <h1 class="text-2xl font-black text-gray-900">Расписание</h1>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Календарь -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 id="schedule-month-title" class="text-lg font-bold text-gray-900 capitalize">...</h3>
+                        <div class="flex space-x-2">
+                            <button id="sch-prev-month" class="w-9 h-9 hover:bg-gray-100 rounded-lg transition flex items-center justify-center">
+                                <i class="fas fa-chevron-left text-gray-500 text-sm"></i>
+                            </button>
+                            <button id="sch-next-month" class="w-9 h-9 hover:bg-gray-100 rounded-lg transition flex items-center justify-center">
+                                <i class="fas fa-chevron-right text-gray-500 text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1 mb-2 text-center text-xs font-bold text-gray-400">
+                        <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
+                    </div>
+                    <div id="schedule-calendar-grid" class="grid grid-cols-7 gap-1"></div>
+                </div>
+
+                <!-- Панель слотов -->
+                <div id="schedule-slots-panel" class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div id="schedule-slots-empty" class="text-center py-12 text-gray-400">
+                        <i class="fas fa-calendar-day text-4xl mb-3"></i>
+                        <p>Выберите дату в календаре</p>
+                    </div>
+                    <div id="schedule-slots-content" class="hidden">
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">Доступное время</h3>
+                        <p id="schedule-selected-date" class="text-sm text-gray-500 mb-6"></p>
+                        <div id="schedule-time-checkboxes" class="grid grid-cols-2 gap-3 mb-6"></div>
+                        <button id="btn-save-schedule" class="w-full bg-brand text-white py-3 rounded-xl font-bold hover:bg-brandHover transition">
+                            Сохранить
+                        </button>
+                        <p id="schedule-save-status" class="text-center text-sm mt-3 hidden"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════ TAB: ПАКЕТЫ ═══════════════ -->
+        <section id="tab-packages" class="tab-content">
+            <div class="flex items-center justify-between mb-6">
+                <h1 class="text-2xl font-black text-gray-900">Пакеты и цены</h1>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-6" id="packages-cards"></div>
+
+            <div class="mt-6 flex justify-end">
+                <button id="btn-save-packages" class="bg-brand text-white px-8 py-3 rounded-xl font-bold hover:bg-brandHover transition">
+                    Сохранить изменения
+                </button>
+            </div>
+            <p id="packages-save-status" class="text-right text-sm mt-3 hidden"></p>
+        </section>
+
+        <!-- ═══════════════ TAB: УСЛУГИ ═══════════════ -->
+        <section id="tab-services" class="tab-content">
+            <div class="flex items-center justify-between mb-6">
+                <h1 class="text-2xl font-black text-gray-900">Услуги</h1>
+                <button id="btn-add-service" class="bg-brand text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-brandHover transition">
+                    <i class="fas fa-plus mr-2"></i>Добавить
+                </button>
+            </div>
+
+            <!-- Форма добавления / редактирования -->
+            <div id="service-form-wrapper" class="hidden mb-6 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <h3 id="service-form-title" class="text-lg font-bold text-gray-900 mb-4">Новая услуга</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <input type="text" id="service-name" placeholder="Название услуги"
+                           class="bg-gray-50 border-2 border-transparent focus:bg-white focus:border-brand rounded-xl py-3 px-4 outline-none transition text-sm">
+                    <input type="text" id="service-price" placeholder="Цена (например: 50€)"
+                           class="bg-gray-50 border-2 border-transparent focus:bg-white focus:border-brand rounded-xl py-3 px-4 outline-none transition text-sm">
+                    <input type="text" id="service-description" placeholder="Описание (необязательно)"
+                           class="bg-gray-50 border-2 border-transparent focus:bg-white focus:border-brand rounded-xl py-3 px-4 outline-none transition text-sm">
+                </div>
+                <div class="flex gap-3 mt-4">
+                    <button id="btn-save-service" class="bg-brand text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-brandHover transition">Сохранить</button>
+                    <button id="btn-cancel-service" class="bg-gray-100 text-gray-600 px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-gray-200 transition">Отмена</button>
+                </div>
+                <input type="hidden" id="service-edit-id" value="">
+            </div>
+
+            <!-- Список услуг -->
+            <div id="services-list" class="space-y-3">
+                <div class="text-center py-12 text-gray-400">Загрузка...</div>
+            </div>
+        </section>
+
+    </main>
+
+    <script type="module" src="js/admin-main.js"></script>
+</body>
+</html>
