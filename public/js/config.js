@@ -12,10 +12,9 @@ export const FIREBASE_CONFIG = {
 
 export const APP_SETTINGS = {
     collectionName: 'leads',
-    // Будущее: коллекция расписания админа
     scheduleCollection: 'admin_schedule',
-    // Будущее: коллекция статусов лидов
-    leadStatusCollection: 'lead_statuses',
+    settingsCollection: 'admin_settings',
+    servicesCollection: 'admin_services',
     
     locale: 'de-DE',
     timeSlots: ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'],
@@ -41,11 +40,10 @@ export const APP_SETTINGS = {
         },
     },
 
-    // Статусы лидов для будущей админки
     leadStatuses: {
         new: { label: 'Новый', color: '#3B82F6' },
         valid: { label: 'Валидный', color: '#22C55E' },
-        hold: { label: 'На удержании', color: '#F59E0B' },
+        hold: { label: 'Ожидание', color: '#F59E0B' },
         trash: { label: 'Мусор', color: '#EF4444' },
         completed: { label: 'Завершён', color: '#6B7280' }
     }
