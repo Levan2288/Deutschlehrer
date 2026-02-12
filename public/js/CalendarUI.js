@@ -4,6 +4,8 @@ import { APP_SETTINGS } from './config.js';
 /**
  * Компонент календаря и выбора времени.
  * Не зависит от глобальных функций — общается через колбэки.
+ * 
+ * Будущее: поддержка busySlots — заблокированные слоты от админа.
  */
 export class CalendarUI {
     constructor(options = {}) {
@@ -16,20 +18,22 @@ export class CalendarUI {
         this.currentDate = new Date();
         this.selectedDate = null;
         this.selectedTime = null;
+        
+        // Будущее: занятые слоты (загружаются из БД)
+        this.busySlots = [];
+        // Будущее: выходные дни админа
+        this.blockedDays = [];
 
-        // Колбэки — передаются извне (из BookingManager)
         this.onDateSelect = options.onDateSelect || (() => {});
         this.onTimeSelect = options.onTimeSelect || (() => {});
     }
 
-    /** Инициализация: рендер + привязка событий навигации */
     init() {
         this._bindNavigation();
         this._bindTimeSlots();
         this.render();
     }
 
-    /** Привязка кнопок ←/→ через addEventListener (не onclick в HTML) */
     _bindNavigation() {
         if (this.prevBtn) {
             this.prevBtn.addEventListener('click', () => this.changeMonth(-1));
@@ -39,25 +43,22 @@ export class CalendarUI {
         }
     }
 
-    /** Делегирование кликов по слотам времени */
     _bindTimeSlots() {
         if (!this.timeSlotsContainer) return;
         
         this.timeSlotsContainer.addEventListener('click', (e) => {
             const btn = e.target.closest('.time-slot');
-            if (!btn) return;
+            if (!btn || btn.disabled) return;
             
             const time = btn.dataset.time;
             if (time) this._handleTimeClick(time, btn);
         });
     }
 
-    /** Рендер сетки календаря */
     render() {
         const year = this.currentDate.getFullYear();
         const month = this.currentDate.getMonth();
         
-        // Заголовок месяца
         if (this.monthLabel) {
             this.monthLabel.innerText = this.currentDate.toLocaleString(
                 APP_SETTINGS.locale, 
@@ -68,28 +69,27 @@ export class CalendarUI {
         if (!this.calendarGrid) return;
         this.calendarGrid.innerHTML = '';
 
-        const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7; // Пн = 0
+        const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7;
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        // Пустые ячейки до первого дня
         for (let i = 0; i < firstDayIndex; i++) {
             const empty = document.createElement('div');
             this.calendarGrid.appendChild(empty);
         }
 
-        // Дни месяца
         for (let d = 1; d <= daysInMonth; d++) {
             const dateObj = new Date(year, month, d);
             const isPast = dateObj < today;
+            const isBlocked = this._isDayBlocked(dateObj);
             const isSelected = this.selectedDate && dateObj.toDateString() === this.selectedDate.toDateString();
 
             const cell = document.createElement('div');
             cell.innerText = d;
-            cell.className = this._getDayCellClass(isPast, isSelected);
+            cell.className = this._getDayCellClass(isPast || isBlocked, isSelected);
 
-            if (!isPast) {
+            if (!isPast && !isBlocked) {
                 cell.addEventListener('click', () => this._handleDateClick(dateObj));
             }
 
@@ -97,7 +97,6 @@ export class CalendarUI {
         }
     }
 
-    /** CSS-классы для ячейки дня */
     _getDayCellClass(isPast, isSelected) {
         const base = 'calendar-day h-14 w-14 flex items-center justify-center transition-all text-sm font-black border border-transparent rounded-full';
         
@@ -110,19 +109,19 @@ export class CalendarUI {
         return `${base} hover:bg-brand/10 hover:text-brand cursor-pointer text-gray-900 bg-gray-50`;
     }
 
-    /** Обработка клика по дате */
     _handleDateClick(date) {
         this.selectedDate = date;
-        this.render(); // Перерисовка с подсветкой
+        this.selectedTime = null; // Сброс времени при смене даты
+        this._resetTimeSlots();
+        this.render();
         this.onDateSelect(date);
     }
 
-    /** Обработка клика по времени */
     _handleTimeClick(time, buttonElement) {
         this.selectedTime = time;
 
         // Сброс всех слотов
-        document.querySelectorAll('.time-slot').forEach(el => {
+        this.timeSlotsContainer.querySelectorAll('.time-slot').forEach(el => {
             el.classList.remove('bg-brand', 'text-white', 'border-brand');
             el.classList.add('border-gray-200', 'bg-white');
         });
@@ -134,7 +133,50 @@ export class CalendarUI {
         this.onTimeSelect(time);
     }
 
-    /** Переключение месяца */
+    /** Сброс подсветки слотов времени */
+    _resetTimeSlots() {
+        if (!this.timeSlotsContainer) return;
+        this.timeSlotsContainer.querySelectorAll('.time-slot').forEach(el => {
+            el.classList.remove('bg-brand', 'text-white', 'border-brand');
+            el.classList.add('border-gray-200', 'bg-white');
+            el.disabled = false;
+        });
+    }
+
+    /**
+     * БУДУЩЕЕ: Обновление занятых слотов.
+     * Вызывается после загрузки данных из БД.
+     */
+    updateBusySlots(busyTimes = []) {
+        this.busySlots = busyTimes;
+        if (!this.timeSlotsContainer) return;
+        
+        this.timeSlotsContainer.querySelectorAll('.time-slot').forEach(el => {
+            const time = el.dataset.time;
+            if (busyTimes.includes(time)) {
+                el.disabled = true;
+                el.classList.add('opacity-40', 'cursor-not-allowed', 'line-through');
+                el.classList.remove('hover:border-brand', 'hover:text-brand');
+            }
+        });
+    }
+
+    /**
+     * БУДУЩЕЕ: Проверка, заблокирован ли день админом.
+     */
+    _isDayBlocked(dateObj) {
+        const dateStr = dateObj.toISOString().split('T')[0];
+        return this.blockedDays.includes(dateStr);
+    }
+
+    /**
+     * БУДУЩЕЕ: Установка заблокированных дней из расписания админа.
+     */
+    setBlockedDays(days = []) {
+        this.blockedDays = days;
+        this.render();
+    }
+
     changeMonth(offset) {
         this.currentDate.setMonth(this.currentDate.getMonth() + offset);
         this.render();

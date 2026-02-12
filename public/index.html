@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Елена | Немецкий язык и Учебная терапия</title>
+    <meta name="description" content="Преподаватель немецкого языка с двумя дипломами ВУЗов Германии. Подготовка к TELC, Goethe. Учебная терапия. Запись онлайн.">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -12,27 +13,62 @@
                     colors: { 
                         brand: '#22CBB9', 
                         brandHover: '#1BA899',
+                        brandLight: '#F0FDFA',
                         dark: '#1F2937',
                         gold: '#F59E0B'
                     },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                    fontFamily: { 
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['Inter', 'system-ui', 'sans-serif']
+                    }
                 }
             }
         }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        * { scroll-behavior: smooth; }
+        
         .gradient-text {
-            background: linear-gradient(to right, #22CBB9, #1F2937);
+            background: linear-gradient(135deg, #22CBB9 0%, #0D9488 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+        
+        .package-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .package-card.selected {
             border-color: #22CBB9;
             background-color: #F0FDFA;
             transform: scale(1.02);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 20px 40px -10px rgba(34, 203, 185, 0.2);
+        }
+        
+        .calendar-day {
+            transition: all 0.15s ease;
+        }
+        
+        /* Анимация появления */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        .delay-1 { animation-delay: 0.1s; opacity: 0; }
+        .delay-2 { animation-delay: 0.2s; opacity: 0; }
+        .delay-3 { animation-delay: 0.3s; opacity: 0; }
+        
+        /* Пульс для CTA */
+        @keyframes subtlePulse {
+            0%, 100% { box-shadow: 0 4px 15px rgba(34, 203, 185, 0.3); }
+            50% { box-shadow: 0 4px 25px rgba(34, 203, 185, 0.5); }
+        }
+        .pulse-cta {
+            animation: subtlePulse 3s ease-in-out infinite;
         }
     </style>
 </head>
@@ -41,49 +77,58 @@
     <!-- ═══════════════ NAV ═══════════════ -->
     <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
+            <div class="flex justify-between h-16 sm:h-20 items-center">
                 <div class="flex items-center space-x-2">
                     <div class="bg-brand p-2 rounded-lg text-white"><i class="fas fa-graduation-cap"></i></div>
                     <span class="font-black text-xl tracking-tight text-gray-900">DEUTSCH<span class="text-brand">PROFI</span></span>
                 </div>
-                <a href="#pricing" class="hidden md:block bg-dark text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-gray-800 transition">Записаться</a>
+                <a href="#pricing" class="hidden md:block bg-dark text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-black transition">Записаться</a>
             </div>
         </div>
     </nav>
 
     <!-- ═══════════════ HERO ═══════════════ -->
     <header class="relative bg-white overflow-hidden">
-        <div class="max-w-6xl mx-auto px-4 pt-16 pb-24 lg:pt-24">
+        <div class="max-w-6xl mx-auto px-4 pt-12 pb-20 lg:pt-20 lg:pb-24">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <div class="inline-block bg-brand/10 text-brand font-bold px-4 py-1 rounded-full text-sm mb-6">
-                        🇩🇪 Живу в Германии 20+ лет
+                <div class="animate-in">
+                    <div class="inline-block bg-brand/10 text-brand font-bold px-4 py-1.5 rounded-full text-sm mb-6">
+                        🇩🇪 В Германии 20+ лет
                     </div>
-                    <h1 class="text-4xl lg:text-6xl font-black text-gray-900 leading-tight mb-6">
-                        Немецкий язык <br>и <span class="gradient-text">школьная адаптация</span>
+                    <h1 class="text-4xl lg:text-[3.5rem] font-black text-gray-900 leading-[1.1] mb-6">
+                        Немецкий язык<br>и <span class="gradient-text">школьная адаптация</span>
                     </h1>
-                    <p class="text-lg text-gray-600 mb-8 leading-relaxed">
-                        Помогаю детям и взрослым не просто выучить язык, а понять систему. 
-                        Два высших образования (Гамбург/Лейпциг), статус учебного терапевта и 8 лет практики в немецких школах.
+                    <p class="text-lg text-gray-600 mb-8 leading-relaxed max-w-lg">
+                        Два диплома немецких вузов. Статус учебного терапевта. 
+                        8 лет в школах Германии. Помогаю понять систему, а не просто выучить слова.
                     </p>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="#pricing" class="px-8 py-4 bg-brand text-white font-bold rounded-xl shadow-lg shadow-brand/30 hover:bg-brandHover transition text-center">
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="#pricing" class="px-8 py-4 bg-brand text-white font-bold rounded-xl shadow-lg shadow-brand/25 hover:bg-brandHover transition text-center pulse-cta">
                             Выбрать программу
                         </a>
                         <a href="#about" class="px-8 py-4 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition text-center">
-                            Мои дипломы
+                            Подробнее обо мне
                         </a>
                     </div>
                 </div>
-                <div class="relative">
+                <div class="relative animate-in delay-2">
                     <div class="aspect-[4/5] bg-gray-200 rounded-[2.5rem] overflow-hidden shadow-2xl relative">
-                        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Елена Преподаватель" class="object-cover w-full h-full">
-                        <div class="absolute bottom-8 left-8 bg-white p-4 rounded-2xl shadow-xl max-w-[200px]">
-                            <div class="flex items-center gap-2 mb-2">
-                                <i class="fas fa-star text-gold"></i>
-                                <span class="font-bold text-sm">Эксперт TELC/Goethe</span>
+                        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                             alt="Елена — преподаватель немецкого языка" 
+                             class="object-cover w-full h-full"
+                             loading="eager">
+                        <div class="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-xl">
+                            <div class="flex items-center gap-3">
+                                <div class="flex -space-x-1">
+                                    <i class="fas fa-star text-gold text-sm"></i>
+                                    <i class="fas fa-star text-gold text-sm"></i>
+                                    <i class="fas fa-star text-gold text-sm"></i>
+                                    <i class="fas fa-star text-gold text-sm"></i>
+                                    <i class="fas fa-star text-gold text-sm"></i>
+                                </div>
+                                <span class="font-bold text-sm text-gray-800">Эксперт TELC / Goethe</span>
                             </div>
-                            <p class="text-xs text-gray-500">Мои ученики успешно сдают экзамены и поступают в школы.</p>
+                            <p class="text-xs text-gray-500 mt-1">Ученики сдают экзамены и поступают в школы</p>
                         </div>
                     </div>
                 </div>
@@ -94,30 +139,38 @@
     <!-- ═══════════════ ABOUT ═══════════════ -->
     <section id="about" class="py-20 bg-gray-50">
         <div class="max-w-4xl mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-black text-gray-900 mb-4">Почему выбирают меня?</h2>
-                <p class="text-gray-500">Не просто репетитор, а педагог внутри немецкой системы.</p>
+            <div class="text-center mb-14">
+                <h2 class="text-3xl font-black text-gray-900 mb-3">Почему выбирают меня</h2>
+                <p class="text-gray-500">Не репетитор, а педагог внутри немецкой системы</p>
             </div>
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <i class="fas fa-university text-brand text-3xl mb-4"></i>
-                    <h3 class="font-bold text-xl mb-2">Два диплома ВУЗов ФРГ</h3>
-                    <p class="text-gray-600 text-sm">Магистр лингвистики (Гамбург) и Педагог начальных классов (Лейпциг). Государственная сертификация.</p>
+            <div class="grid md:grid-cols-2 gap-5">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-brand/10 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fas fa-university text-brand text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Два диплома ВУЗов ФРГ</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Магистр лингвистики (Гамбург) + педагог начальных классов (Лейпциг). Государственная сертификация.</p>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <i class="fas fa-brain text-brand text-3xl mb-4"></i>
-                    <h3 class="font-bold text-xl mb-2">Учебный терапевт</h3>
-                    <p class="text-gray-600 text-sm">Работаю с трудностями в обучении. Индивидуальный подход к когнитивным особенностям ребенка.</p>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-brand/10 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fas fa-brain text-brand text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Учебный терапевт</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Работаю с трудностями в обучении. Индивидуальный подход к когнитивным особенностям ребёнка.</p>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <i class="fas fa-school text-brand text-3xl mb-4"></i>
-                    <h3 class="font-bold text-xl mb-2">8 лет в школах Германии</h3>
-                    <p class="text-gray-600 text-sm">Знаю "внутреннюю кухню" начальной школы. Готовлю к реалиям, а не к учебнику.</p>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-brand/10 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fas fa-school text-brand text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">8 лет в школах Германии</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Знаю «внутреннюю кухню» начальной школы. Готовлю к реалиям, а не к учебнику.</p>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <i class="fas fa-gamepad text-brand text-3xl mb-4"></i>
-                    <h3 class="font-bold text-xl mb-2">Game-Based Learning</h3>
-                    <p class="text-gray-600 text-sm">Уроки проходят онлайн в игровой форме. Никакой скучной зубрежки, только вовлечение.</p>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-brand/10 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fas fa-gamepad text-brand text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Game-Based Learning</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Уроки онлайн в игровой форме. Вовлечение вместо зубрёжки.</p>
                 </div>
             </div>
         </div>
@@ -127,75 +180,80 @@
     <section id="pricing" class="py-20 bg-white">
         <div class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-black text-gray-900 mb-4">Выберите формат обучения</h2>
-                <p class="text-gray-500">Инвестируйте в результат, а не в часы.</p>
+                <h2 class="text-3xl font-black text-gray-900 mb-3">Выберите формат</h2>
+                <p class="text-gray-500">Инвестируйте в результат, не в часы</p>
             </div>
 
-            <div class="grid lg:grid-cols-3 gap-8">
+            <div class="grid lg:grid-cols-3 gap-6 lg:gap-8">
                 <!-- Пробный -->
-                <div data-package="single" id="pkg-single" class="package-card cursor-pointer border-2 border-gray-100 rounded-[2rem] p-8 hover:border-brand transition duration-300 relative bg-white">
-                    <h3 class="text-xl font-bold text-gray-400 mb-2">Пробный старт</h3>
-                    <div class="text-4xl font-black text-gray-900 mb-6">45 € <span class="text-base font-medium text-gray-400">/ урок</span></div>
+                <div data-package="single" id="pkg-single" class="package-card cursor-pointer border-2 border-gray-100 rounded-[2rem] p-8 hover:border-brand/50 transition relative bg-white">
+                    <h3 class="text-lg font-bold text-gray-400 mb-2">Пробный старт</h3>
+                    <div class="text-4xl font-black text-gray-900 mb-1">45 €</div>
+                    <p class="text-sm text-gray-400 mb-6">одно занятие · 60 мин</p>
                     <ul class="space-y-3 mb-8 text-gray-600 text-sm">
-                        <li><i class="fas fa-check text-brand mr-2"></i>Диагностика уровня</li>
-                        <li><i class="fas fa-check text-brand mr-2"></i>1 час занятий (60 мин)</li>
-                        <li><i class="fas fa-check text-brand mr-2"></i>Рекомендации</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-brand"></i> Диагностика уровня</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-brand"></i> Полноценный урок</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-brand"></i> Рекомендации по программе</li>
                     </ul>
-                    <button class="w-full py-3 rounded-xl font-bold border-2 border-gray-200 text-gray-600">Выбрать</button>
+                    <button class="w-full py-3 rounded-xl font-bold border-2 border-gray-200 text-gray-600 hover:border-brand hover:text-brand transition">Выбрать</button>
                 </div>
 
                 <!-- Хит продаж -->
-                <div data-package="pack10" id="pkg-pack10" class="package-card cursor-pointer border-2 border-brand rounded-[2rem] p-8 shadow-2xl relative bg-white transform md:-translate-y-4">
-                    <div class="absolute top-0 right-0 bg-brand text-white text-xs font-bold px-3 py-1 rounded-bl-xl rounded-tr-xl">ХИТ ПРОДАЖ</div>
-                    <h3 class="text-xl font-bold text-brand mb-2">Курс "Результат"</h3>
-                    <div class="text-4xl font-black text-gray-900 mb-2">400 €</div>
-                    <p class="text-sm text-gray-400 mb-6">Пакет из 10 занятий (40€ / урок)</p>
-                    <ul class="space-y-3 mb-8 text-gray-700 font-medium">
-                        <li><i class="fas fa-check-circle text-brand mr-2"></i>Экономия 50€</li>
-                        <li><i class="fas fa-check-circle text-brand mr-2"></i>Подготовка к TELC/Goethe</li>
-                        <li><i class="fas fa-check-circle text-brand mr-2"></i>Закрепление времени в графике</li>
-                        <li><i class="fas fa-check-circle text-brand mr-2"></i>Домашние задания и проверка</li>
+                <div data-package="pack10" id="pkg-pack10" class="package-card cursor-pointer border-2 border-brand rounded-[2rem] p-8 shadow-2xl relative bg-white transform lg:-translate-y-4">
+                    <div class="absolute top-0 right-0 bg-brand text-white text-xs font-bold px-4 py-1.5 rounded-bl-xl rounded-tr-2xl">ЛУЧШИЙ ВЫБОР</div>
+                    <h3 class="text-lg font-bold text-brand mb-2">Курс «Результат»</h3>
+                    <div class="text-4xl font-black text-gray-900 mb-1">400 €</div>
+                    <p class="text-sm text-gray-400 mb-6">10 занятий · 40€ за урок</p>
+                    <ul class="space-y-3 mb-8 text-gray-700 font-medium text-sm">
+                        <li class="flex items-center gap-2"><i class="fas fa-check-circle text-brand"></i> Экономия 50€</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check-circle text-brand"></i> Подготовка к TELC / Goethe</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check-circle text-brand"></i> Закреплённое время</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check-circle text-brand"></i> Домашние задания + проверка</li>
                     </ul>
                     <button class="w-full py-3 rounded-xl font-bold bg-brand text-white hover:bg-brandHover transition">Я выбираю результат</button>
                 </div>
 
                 <!-- VIP -->
-                <div data-package="vip" id="pkg-vip" class="package-card cursor-pointer border-2 border-gray-100 rounded-[2rem] p-8 hover:border-gold transition duration-300 relative bg-white">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">VIP / Терапия</h3>
-                    <div class="text-4xl font-black text-gray-900 mb-6">600 €</div>
-                    <p class="text-sm text-gray-400 mb-6 mt-[-20px]">10 занятий + Поддержка</p>
+                <div data-package="vip" id="pkg-vip" class="package-card cursor-pointer border-2 border-gray-100 rounded-[2rem] p-8 hover:border-gold/50 transition relative bg-white">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">VIP / Терапия</h3>
+                    <div class="text-4xl font-black text-gray-900 mb-1">600 €</div>
+                    <p class="text-sm text-gray-400 mb-6">10 занятий + поддержка</p>
                     <ul class="space-y-3 mb-8 text-gray-600 text-sm">
-                        <li><i class="fas fa-star text-gold mr-2"></i><b>Учебная терапия</b> (Сложные случаи)</li>
-                        <li><i class="fas fa-star text-gold mr-2"></i>Консультации для родителей</li>
-                        <li><i class="fas fa-star text-gold mr-2"></i>Индивидуальный план адаптации</li>
-                        <li><i class="fas fa-star text-gold mr-2"></i>Связь в WhatsApp 24/7</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-star text-gold"></i> <b>Учебная терапия</b> (сложные случаи)</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-star text-gold"></i> Консультации для родителей</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-star text-gold"></i> Индивидуальный план адаптации</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-star text-gold"></i> WhatsApp-связь 24/7</li>
                     </ul>
-                    <button class="w-full py-3 rounded-xl font-bold border-2 border-gray-200 text-gray-600 hover:border-gold hover:text-gold">Выбрать VIP</button>
+                    <button class="w-full py-3 rounded-xl font-bold border-2 border-gray-200 text-gray-600 hover:border-gold hover:text-gold transition">Выбрать VIP</button>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ═══════════════ BOOKING ═══════════════ -->
-    <section id="booking" class="py-12 bg-gray-50 border-t border-gray-200">
+    <section id="booking" class="py-12 lg:py-16 bg-gray-50 border-t border-gray-200">
         <div class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-10">
-                <h3 class="text-2xl font-black">Забронируйте первый урок</h3>
-                <p class="text-gray-500">Выберите удобное время для старта. Если вы выбрали пакет, мы согласуем остальные даты на первом занятии.</p>
+                <h3 class="text-2xl font-black text-gray-900">Забронируйте первый урок</h3>
+                <p class="text-gray-500 mt-2 max-w-lg mx-auto">Выберите удобную дату. Остальные занятия согласуем на первом уроке.</p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
                 
                 <!-- Календарь -->
                 <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-[2rem] shadow-xl border border-gray-100" id="calendar-container">
                     <div class="flex items-center justify-between mb-8">
                         <h3 id="current-month" class="text-xl sm:text-2xl font-black text-gray-900 capitalize">...</h3>
                         <div class="flex space-x-2">
-                            <button id="btn-prev-month" class="w-10 h-10 hover:bg-gray-100 rounded-xl transition flex items-center justify-center"><i class="fas fa-chevron-left"></i></button>
-                            <button id="btn-next-month" class="w-10 h-10 hover:bg-gray-100 rounded-xl transition flex items-center justify-center"><i class="fas fa-chevron-right"></i></button>
+                            <button id="btn-prev-month" class="w-10 h-10 hover:bg-gray-100 rounded-xl transition flex items-center justify-center" aria-label="Предыдущий месяц">
+                                <i class="fas fa-chevron-left text-gray-600"></i>
+                            </button>
+                            <button id="btn-next-month" class="w-10 h-10 hover:bg-gray-100 rounded-xl transition flex items-center justify-center" aria-label="Следующий месяц">
+                                <i class="fas fa-chevron-right text-gray-600"></i>
+                            </button>
                         </div>
                     </div>
-                    <div class="grid grid-cols-7 gap-2 sm:gap-4 mb-4 text-center text-xs font-bold text-gray-400 uppercase">
+                    <div class="grid grid-cols-7 gap-2 sm:gap-4 mb-4 text-center text-xs font-bold text-gray-400 uppercase tracking-wide">
                         <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
                     </div>
                     <div id="calendar-grid" class="grid grid-cols-7 gap-2 sm:gap-4"></div>
@@ -207,58 +265,85 @@
                     <div id="form-content">
                         <div class="flex justify-between items-center mb-6">
                             <h3 class="text-2xl font-black">Детали</h3>
-                            <span id="selected-package-badge" class="bg-gray-200 text-gray-600 text-xs font-bold px-2 py-1 rounded">Тариф не выбран</span>
+                            <span id="selected-package-badge" class="bg-gray-200 text-gray-600 text-xs font-bold px-3 py-1 rounded-full">Тариф не выбран</span>
                         </div>
                         
+                        <!-- Дата и время -->
                         <div class="mb-6 p-4 bg-gray-50 rounded-xl flex items-center gap-4 border border-gray-100">
-                            <i class="far fa-calendar-alt text-brand text-xl"></i>
+                            <div class="w-10 h-10 bg-brand/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="far fa-calendar-alt text-brand"></i>
+                            </div>
                             <div>
-                                <p class="text-[10px] uppercase font-bold text-gray-400">Дата старта</p>
-                                <p id="display-date" class="font-bold text-lg">Выберите дату</p>
+                                <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Дата старта</p>
+                                <p id="display-date" class="font-bold text-lg text-gray-900">Выберите дату</p>
                             </div>
                         </div>
 
-                        <div class="mb-8">
-                            <p class="text-xs font-bold text-gray-400 uppercase mb-3">Время (Берлин/CET)</p>
+                        <!-- Слоты времени -->
+                        <div class="mb-6">
+                            <p class="text-xs font-bold text-gray-400 uppercase mb-3 tracking-wider">Время (Берлин / CET)</p>
                             <div id="time-slots-container" class="grid grid-cols-3 gap-2">
-                                <button data-time="09:00" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">09:00</button>
-                                <button data-time="11:00" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">11:00</button>
-                                <button data-time="13:00" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">13:00</button>
-                                <button data-time="15:00" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">15:00</button>
-                                <button data-time="17:00" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">17:00</button>
-                                <button data-time="19:00" class="time-slot border border-gray-200 py-2 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">19:00</button>
+                                <button type="button" data-time="09:00" class="time-slot border border-gray-200 py-2.5 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">09:00</button>
+                                <button type="button" data-time="11:00" class="time-slot border border-gray-200 py-2.5 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">11:00</button>
+                                <button type="button" data-time="13:00" class="time-slot border border-gray-200 py-2.5 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">13:00</button>
+                                <button type="button" data-time="15:00" class="time-slot border border-gray-200 py-2.5 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">15:00</button>
+                                <button type="button" data-time="17:00" class="time-slot border border-gray-200 py-2.5 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">17:00</button>
+                                <button type="button" data-time="19:00" class="time-slot border border-gray-200 py-2.5 rounded-lg text-sm font-bold hover:border-brand hover:text-brand transition bg-white">19:00</button>
                             </div>
                         </div>
 
-                        <form id="booking-form" class="space-y-4">
+                        <!-- Ошибки валидации -->
+                        <div id="form-errors" class="hidden mb-4 p-3 bg-red-50 border border-red-100 rounded-xl space-y-1"></div>
+
+                        <!-- Форма -->
+                        <form id="booking-form" class="space-y-3">
                             <input type="hidden" id="package-input" name="package" value="">
                             <input type="hidden" id="date-input" name="date" value="">
                             <input type="hidden" id="time-input" name="time" value="">
 
-                            <input type="text" name="name" required placeholder="Ваше Имя" class="w-full bg-gray-50 border-transparent focus:bg-white focus:border-brand focus:ring-0 border-2 rounded-xl py-3 px-4 outline-none transition-all">
-                            <input type="tel" name="phone" required placeholder="WhatsApp / Телефон" class="w-full bg-gray-50 border-transparent focus:bg-white focus:border-brand focus:ring-0 border-2 rounded-xl py-3 px-4 outline-none transition-all">
-                            <textarea name="goal" rows="2" placeholder="Цель (школа, экзамен, для себя)" class="w-full bg-gray-50 border-transparent focus:bg-white focus:border-brand focus:ring-0 border-2 rounded-xl py-3 px-4 outline-none transition-all"></textarea>
+                            <input type="text" name="name" required placeholder="Ваше имя" 
+                                   class="w-full bg-gray-50 border-2 border-transparent focus:bg-white focus:border-brand focus:ring-0 rounded-xl py-3 px-4 outline-none transition-all text-sm">
+                            <input type="tel" name="phone" required placeholder="WhatsApp / Телефон" 
+                                   class="w-full bg-gray-50 border-2 border-transparent focus:bg-white focus:border-brand focus:ring-0 rounded-xl py-3 px-4 outline-none transition-all text-sm">
+                            <textarea name="goal" rows="2" placeholder="Цель: школа, экзамен, для себя..." 
+                                      class="w-full bg-gray-50 border-2 border-transparent focus:bg-white focus:border-brand focus:ring-0 rounded-xl py-3 px-4 outline-none transition-all text-sm resize-none"></textarea>
                             
-                            <button type="submit" id="book-btn" class="w-full bg-dark text-white py-4 rounded-xl font-bold hover:bg-black transition-all shadow-lg hover:shadow-xl transform active:scale-[0.98]">
+                            <button type="submit" id="book-btn" 
+                                    class="w-full bg-dark text-white py-4 rounded-xl font-bold hover:bg-black transition-all shadow-lg hover:shadow-xl transform active:scale-[0.98] text-sm">
                                 Подтвердить запись
                             </button>
+                            <p class="text-[11px] text-gray-400 text-center">Нажимая кнопку, вы соглашаетесь на обработку данных</p>
                         </form>
                     </div>
 
+                    <!-- Экран успеха -->
                     <div id="booking-success" class="hidden text-center py-10">
                         <div class="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
                             <i class="fas fa-check text-3xl"></i>
                         </div>
                         <h4 class="text-2xl font-black mb-2">Отлично!</h4>
-                        <p class="text-gray-500 mb-6">Я свяжусь с вами в ближайшее время для подтверждения.</p>
-                        <button onclick="location.reload()" class="text-brand font-bold hover:underline">Вернуться</button>
+                        <p class="text-gray-500 mb-6">Свяжусь с вами в ближайшее время для подтверждения.</p>
+                        <button id="btn-reset-form" class="text-brand font-bold hover:underline">← Вернуться</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Единственный скрипт — модульная точка входа -->
+    <!-- ═══════════════ FOOTER ═══════════════ -->
+    <footer class="bg-white border-t border-gray-100 py-8 mt-auto">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="flex items-center space-x-2">
+                    <div class="bg-brand p-1.5 rounded text-white text-xs"><i class="fas fa-graduation-cap"></i></div>
+                    <span class="font-bold text-sm text-gray-900">DEUTSCH<span class="text-brand">PROFI</span></span>
+                </div>
+                <p class="text-xs text-gray-400">&copy; 2025 DeutschProfi. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модульная точка входа -->
     <script type="module" src="js/main.js"></script>
 </body>
 </html>

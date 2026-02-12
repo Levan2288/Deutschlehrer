@@ -18,29 +18,35 @@ export class BookingManager {
         this.calendar = calendar;
         this.packageManager = packageManager;
 
-        // DOM-элементы формы
         this.form = document.getElementById('booking-form');
         this.btn = document.getElementById('book-btn');
         this.formContent = document.getElementById('form-content');
         this.successBlock = document.getElementById('booking-success');
         this.displayDate = document.getElementById('display-date');
         this.bookingDetails = document.getElementById('booking-details');
+        this.errorContainer = document.getElementById('form-errors');
     }
 
-    /** Инициализация: привязка submit + настройка колбэков календаря */
     init() {
-        // Привязываем submit через addEventListener (убираем onsubmit из HTML)
         if (this.form) {
             this.form.removeAttribute('onsubmit');
             this.form.addEventListener('submit', (e) => this._handleSubmit(e));
         }
 
-        // Настраиваем колбэки календаря
+        // Колбэки от календаря
         this.calendar.onDateSelect = (date) => this._onDateSelected(date);
         this.calendar.onTimeSelect = (time) => this._onTimeSelected(time);
+
+        // Колбэк от пакетов — активировать форму при выборе пакета
+        this.packageManager.onPackageSelect = () => this._clearErrors();
+
+        // Кнопка "Вернуться" на экране успеха (убираем inline onclick)
+        const resetBtn = document.getElementById('btn-reset-form');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => location.reload());
+        }
     }
 
-    /** Колбэк: дата выбрана */
     _onDateSelected(date) {
         const formatted = date.toLocaleDateString(APP_SETTINGS.locale, {
             day: 'numeric', month: 'long', year: 'numeric'
@@ -50,7 +56,7 @@ export class BookingManager {
             this.displayDate.innerText = formatted;
         }
 
-        // Активируем правую панель с формой
+        // Активируем правую панель
         if (this.bookingDetails) {
             this.bookingDetails.classList.remove('opacity-50', 'pointer-events-none');
             this.bookingDetails.classList.add('opacity-100');
@@ -59,22 +65,20 @@ export class BookingManager {
         document.getElementById('date-input').value = formatted;
     }
 
-    /** Колбэк: время выбрано */
     _onTimeSelected(time) {
         if (this.displayDate) {
             const dateText = this.displayDate.innerText.split(' в ')[0];
-            this.displayDate.innerHTML = `${dateText} <span class="text-brand">в ${time}</span>`;
+            this.displayDate.innerHTML = `${dateText} <span class="text-brand font-black">в ${time}</span>`;
         }
         document.getElementById('time-input').value = time;
     }
 
-    /** Обработка отправки формы */
     async _handleSubmit(e) {
         e.preventDefault();
+        this._clearErrors();
 
         const formData = new FormData(e.target);
 
-        // Собираем все данные в один объект
         const leadData = {
             name: formData.get('name')?.trim(),
             phone: formData.get('phone')?.trim(),
@@ -88,7 +92,7 @@ export class BookingManager {
         // Валидация
         const validation = Validator.validateBooking(leadData);
         if (!validation.isValid) {
-            alert("Пожалуйста, исправьте:\n\n• " + validation.errors.join("\n• "));
+            this._showErrors(validation.errors);
             return;
         }
 
@@ -100,22 +104,42 @@ export class BookingManager {
         if (result.success) {
             this._showSuccess();
         } else {
-            // FIX: result.error — это уже строка, не объект!
-            alert("Ошибка: " + (result.error || "Неизвестная ошибка. Попробуйте позже."));
+            this._showErrors([result.error || "Ошибка сервера. Попробуйте позже."]);
             this._setLoading(false);
         }
     }
 
-    /** Состояние загрузки кнопки */
+    /** Показ ошибок в UI (вместо alert) */
+    _showErrors(errors) {
+        if (!this.errorContainer) return;
+        this.errorContainer.innerHTML = errors.map(err => 
+            `<div class="flex items-center gap-2 text-red-600 text-sm">
+                <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                </svg>
+                <span>${err}</span>
+            </div>`
+        ).join('');
+        this.errorContainer.classList.remove('hidden');
+        
+        // Скролл к ошибкам
+        this.errorContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    _clearErrors() {
+        if (!this.errorContainer) return;
+        this.errorContainer.innerHTML = '';
+        this.errorContainer.classList.add('hidden');
+    }
+
     _setLoading(state) {
         if (!this.btn) return;
         this.btn.disabled = state;
         this.btn.innerHTML = state
-            ? '<i class="fas fa-spinner fa-spin mr-2"></i> ЗАПИСЬ...'
+            ? '<i class="fas fa-spinner fa-spin mr-2"></i> Отправка...'
             : 'Подтвердить запись';
     }
 
-    /** Показ экрана успеха */
     _showSuccess() {
         if (this.formContent) this.formContent.classList.add('hidden');
         if (this.successBlock) this.successBlock.classList.remove('hidden');

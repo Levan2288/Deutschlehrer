@@ -14,13 +14,13 @@ export class Validator {
         const errors = [];
 
         if (!data.package) {
-            errors.push("Выберите пакет обучения (тариф)");
+            errors.push("Выберите пакет обучения");
         }
         if (!data.name || data.name.trim().length < 2) {
-            errors.push("Введите корректное имя (минимум 2 символа)");
+            errors.push("Укажите имя (минимум 2 символа)");
         }
         if (!data.phone || data.phone.trim().length < 5) {
-            errors.push("Введите корректный номер телефона");
+            errors.push("Укажите номер телефона");
         }
         if (!data.date) {
             errors.push("Выберите дату в календаре");

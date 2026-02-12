@@ -1,112 +1,79 @@
-// js/DatabaseService.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { 
-    getAuth, 
-    signInAnonymously 
-} from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
-import { 
-    getFirestore, 
-    collection, 
-    addDoc, 
-    serverTimestamp 
-} from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
-import { FIREBASE_CONFIG, APP_SETTINGS } from './config.js';
+// js/PackageManager.js
+import { APP_SETTINGS } from './config.js';
 
 /**
- * Сервис работы с Firebase.
- * Singleton-паттерн: одно соединение на всё приложение.
+ * Управление выбором пакетов/тарифов.
+ * Обрабатывает клики по карточкам, подсвечивает выбранный,
+ * обновляет бейдж в форме и hidden input.
  */
-export class DatabaseService {
+export class PackageManager {
     constructor() {
-        this.app = null;
-        this.auth = null;
-        this.db = null;
-        this.isConnected = false;
-        this.uid = null;
-        this._initPromise = null; // Защита от повторных вызовов init()
-    }
-
-    /**
-     * Инициализация Firebase + анонимная авторизация.
-     * Безопасен для многократного вызова (идемпотентный).
-     */
-    async init() {
-        // Если уже подключены — выходим
-        if (this.isConnected) return true;
+        this.selectedPackage = null;
+        this.packageCards = [];
+        this.packageBadge = document.getElementById('selected-package-badge');
+        this.packageInput = document.getElementById('package-input');
         
-        // Если init() уже запущен — ждём его завершения (защита от race condition)
-        if (this._initPromise) return this._initPromise;
-
-        this._initPromise = this._doInit();
-        return this._initPromise;
+        // Колбэк — вызывается при выборе пакета (можно подписаться извне)
+        this.onPackageSelect = () => {};
     }
 
-    async _doInit() {
-        try {
-            this.app = initializeApp(FIREBASE_CONFIG);
-            this.auth = getAuth(this.app);
-            this.db = getFirestore(this.app);
+    /** Инициализация: находим карточки, вешаем обработчики */
+    init() {
+        this.packageCards = document.querySelectorAll('.package-card');
+        this._bindCards();
+    }
 
-            const userCredential = await signInAnonymously(this.auth);
-            this.uid = userCredential.user.uid;
-            this.isConnected = true;
-            console.log(`[DB] Авторизация успешна: ${this.uid}`);
-            return true;
-        } catch (error) {
-            console.error("[DB] Ошибка инициализации:", error.code, error.message);
-            this._initPromise = null; // Сброс — позволяем повторную попытку
-            return false;
+    /** Делегирование кликов на карточки тарифов */
+    _bindCards() {
+        this.packageCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const packageKey = card.dataset.package;
+                if (packageKey) this._selectPackage(packageKey, card);
+            });
+        });
+    }
+
+    /** Логика выбора пакета */
+    _selectPackage(packageKey, cardElement) {
+        const pkg = APP_SETTINGS.packages[packageKey];
+        if (!pkg) return;
+
+        this.selectedPackage = packageKey;
+
+        // Сброс всех карточек
+        this.packageCards.forEach(c => c.classList.remove('selected'));
+        
+        // Подсветка выбранной
+        cardElement.classList.add('selected');
+
+        // Обновление бейджа
+        if (this.packageBadge) {
+            this.packageBadge.className = `text-xs font-bold px-3 py-1 rounded-full ${pkg.badgeClass}`;
+            this.packageBadge.innerText = pkg.badgeText || pkg.label;
         }
-    }
 
-    /**
-     * Сохранение лида в Firestore.
-     * @param {Object} leadData — данные из формы бронирования
-     * @returns {Promise<{success: boolean, id?: string, error?: string}>}
-     */
-    async saveLead(leadData) {
-        try {
-            // Гарантируем подключение
-            if (!this.isConnected) {
-                const connected = await this.init();
-                if (!connected) {
-                    return { success: false, error: "Не удалось подключиться к базе данных. Проверьте интернет." };
-                }
-            }
-
-            const documentToSave = {
-                // Данные клиента
-                name: leadData.name || "Аноним",
-                phone: leadData.phone || "Не указан",
-                goal: leadData.goal || "",
-                package: leadData.package || "single",
-                date: leadData.date || null,
-                time: leadData.time || null,
-                readableDate: leadData.readableDate || "",
-                
-                // Метаданные для CRM
-                status: 'new',
-                createdAt: serverTimestamp(),
-                platform: 'web_oop_v2',
-                userAgent: navigator.userAgent,
-                uid: this.uid
-            };
-
-            const leadsRef = collection(this.db, APP_SETTINGS.collectionName);
-            const docRef = await addDoc(leadsRef, documentToSave);
-            
-            console.log("[DB] Лид создан, ID:", docRef.id);
-            return { success: true, id: docRef.id };
-
-        } catch (error) {
-            console.error("[DB] Ошибка записи:", error);
-            return { success: false, error: error.message || "Неизвестная ошибка сервера" };
+        // Обновление hidden input
+        if (this.packageInput) {
+            this.packageInput.value = packageKey;
         }
+
+        // Плавный скролл к секции бронирования
+        const bookingSection = document.getElementById('booking');
+        if (bookingSection) {
+            setTimeout(() => {
+                bookingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
+        }
+
+        // Уведомляем подписчиков
+        this.onPackageSelect(packageKey, pkg);
+        
+        console.log(`[Package] Выбран: ${packageKey}`);
     }
 
-    /** Расширение: запрос занятых слотов */
-    async getBusySlots(dateStr) {
-        console.log(`[DB] Запрос занятых слотов для ${dateStr}`);
-        return [];
+    /** Получение данных текущего пакета */
+    getSelectedPackageInfo() {
+        if (!this.selectedPackage) return null;
+        return APP_SETTINGS.packages[this.selectedPackage] || null;
     }
 }

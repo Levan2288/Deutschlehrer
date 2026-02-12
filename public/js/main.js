@@ -8,31 +8,30 @@ import { Validator } from './Validator.js';
 /**
  * Инициализация приложения.
  * Все компоненты создаются здесь и связываются через BookingManager.
- * Никаких глобальных функций — всё через addEventListener.
  */
 async function initApp() {
     try {
-        // 1. Подключение к БД
+        // 1. БД
         const db = new DatabaseService();
         const dbReady = await db.init();
         
         if (!dbReady) {
-            console.warn("[App] БД недоступна — форма будет работать, но отправка может не пройти.");
+            console.warn("[App] БД недоступна — форма работает, отправка может не пройти.");
         }
 
         // 2. UI-компоненты
         const calendar = new CalendarUI();
         const packageManager = new PackageManager();
 
-        // 3. Оркестратор (связывает всё вместе)
+        // 3. Оркестратор
         const booking = new BookingManager(db, calendar, packageManager);
 
-        // 4. Инициализация всех компонентов
+        // 4. Инициализация
         calendar.init();
         packageManager.init();
         booking.init();
 
-        // 5. Диагностика (dev only)
+        // 5. Диагностика (dev)
         if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
             await Validator.testConnection(db);
         }
@@ -40,7 +39,7 @@ async function initApp() {
         console.log("[App] ✅ Приложение инициализировано");
 
     } catch (error) {
-        console.error("[App] Критическая ошибка инициализации:", error);
+        console.error("[App] Критическая ошибка:", error);
     }
 }
 
