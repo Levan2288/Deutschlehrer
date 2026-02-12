@@ -1,7 +1,7 @@
 // js/main.js — Точка входа приложения
 import { DatabaseService } from './DatabaseService.js';
 import { CalendarUI } from './CalendarUI.js';
-import { PackageManager } from './PackageManager.js';
+import { PackageManager } from '../../admin-panel/js/PackageManager.js';
 import { BookingManager } from './BookingManager.js';
 import { Validator } from './Validator.js';
 import { LanguageSwitcher } from './LanguageSwitcher.js';
